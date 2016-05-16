@@ -1,0 +1,48 @@
+#!/bin/bash
+
+relink=
+if [ "$1" = "--relink" ]; then
+	relink=true
+	shift
+fi
+
+python=$1
+if [ -z $python ]; then
+	python=/app/python3-latest/bin/python
+	python=/app/python2-latest/bin/python
+#	python=$(which python)
+fi
+
+pybin=$(dirname $python)
+if [ ! -x $pybin/pip -o ! -x $pybin/virtualenv ]; then
+	echo "Python installation is missing pip or virtualenv, cannot continue"
+	exit 1
+fi
+
+# relink
+if [ $relink ]; then
+	echo "-> cleanup old installation..."
+	find . -type f -name "*.pyc" -exec rm {} \;
+	rm -rf python dist virtual-python.spec
+
+	# virtual environ
+	$pybin/virtualenv -p $python python
+fi
+
+export VIRTUAL_ENV=./python
+export PATH=${VIRTUAL_ENV}/bin:${PATH}
+
+if [ $relink ]; then
+	if ! pip install -Ur requirements.txt; then
+		echo ""
+		echo "-> Cannot continue !"
+		exit 1
+	fi
+
+	#pip install doctest
+	pip install pylint
+fi
+
+python -m pylint twilio2slack.py
+python -m doctest twilio2slack.py
+
