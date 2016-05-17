@@ -1,0 +1,19 @@
+# vim:set et ts=4 sw=4 ai ft=python:
+
+"""
+Configurator.  Do not put into github.
+"""
+
+__version__ = 1.0
+
+# put your slack hook here, the sample below is not valid
+slack_hook = "https://hooks.slack.com/services/zzzzzzz/yyyyyy/bacaasdfasdfasdf"
+
+# make this random, try:
+#
+#    dd if=/dev/random bs=21 count=1 | base64
+#
+path = '/bXkgZmF2IHRoaW5ncwo'
+
+# probably don't need to change this
+port = 5858

@@ -39,7 +39,7 @@ class Twilio(object):
         if match:
             frm = "(" + match.group(1) + ") " + match.group(2) + "-" + match.group(3)
 
-        res = requests.post(config.slack_post,
+        res = requests.post(config.slack_hook,
                   json.dumps({
                     "text": frm + ": " + msg,
                     "username": "sms",
@@ -65,5 +65,5 @@ if __name__ == '__main__':
         }
     }
 
-    cherrypy.quickstart(Twilio(), config.path, conf)
+    cherrypy.quickstart(Twilio(), config.endpoint, conf)
 
